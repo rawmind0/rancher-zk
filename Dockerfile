@@ -2,7 +2,7 @@ FROM rawmind/rancher-jvm8:0.0.1
 MAINTAINER Raul Sanchez <rawmind@gmail.com>
 
 ENV ZOO_VERSION=3.4.7 \
-    ZOO_HOME=/opt/zk \
+    ZOO_HOME=/opt/zk \ 
     ZOO_LOG_DIR=/opt/zk/logs \
     PATH=/opt/zk/bin:${PATH}
 ENV ZOO_RELEASE=zookeeper-${ZOO_VERSION}
