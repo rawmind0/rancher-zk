@@ -8,14 +8,14 @@ function log {
 
 function checkrancher {
     log "checking rancher network..."
-    a="1"
+    a="`ip a s dev eth0 &> /dev/null; echo $?`"
     while  [ $a -eq 1 ];
     do
         a="`ip a s dev eth0 &> /dev/null; echo $?`" 
         sleep 1
     done
 
-    b="1"
+   b="`ping -c 1 rancher-metadata &> /dev/null; echo $?`"
     while [ $b -eq 1 ]; 
     do
         b="`ping -c 1 rancher-metadata &> /dev/null; echo $?`"
@@ -30,33 +30,33 @@ function taillog {
     tail -F ${ZOO_HOME}/logs/zookeeper.out &
 }
 
-function rmconf {
-    if [ -f ${KAFKA_HOME}/config/server.properties ]; then
-        rm ${KAFKA_HOME}/config/server.properties
-    fi
-}
-
 CONFD_BACKEND=${CONFD_BACKEND:-"rancher"}
-CONFD_PREFIX=${CONFD_PREFIX:-"/2015-07-25"}
+CONFD_PREFIX=${CONFD_PREFIX:-"/latest"}
 CONFD_INTERVAL=${CONFD_INTERVAL:-60}
-CONFD_RELOAD=${CONFD_RELOAD:-true}
 CONFD_PARAMS=${CONFD_PARAMS:-"-backend ${CONFD_BACKEND} -prefix ${CONFD_PREFIX}"}
-JVMFLAGS=${JVMFLAGS:-"-Xms128m -Xmx256m"}
+CONFD_SCRIPT=${CONFD_SCRIPT:-"/tmp/confd-start.sh"}
+JVMFLAGS=${JVMFLAGS:-"-Xms512m -Xmx512m"}
 
 export CONFD_BACKEND CONFD_PREFIX CONFD_INTERVAL CONFD_PARAMS JVMFLAGS
 
 checkrancher
-rmconf
+taillog
 
-if [ "$CONFD_RELOAD" == "true" ]; then
-    taillog
-
+if [ "$CONFD_INTERVAL" -gt "0" ]; then
     CONFD_PARAMS="-interval ${CONFD_INTERVAL} ${CONFD_PARAMS}"
-    confd ${CONFD_PARAMS}
 else
     CONFD_PARAMS="-onetime ${CONFD_PARAMS}"
-    confd ${CONFD_PARAMS}
-
-    log "[ Starting kafka service... ]"
-    ${ZOO_HOME}/bin/zkServer.sh start-foreground
 fi
+
+# Create confd start script
+echo "#!/usr/bin/env sh" > ${CONFD_SCRIPT}
+echo "/usr/bin/nohup /usr/bin/confd ${CONFD_PARAMS} > /opt/zk/logs/confd.log 2>&1 &" >> ${CONFD_SCRIPT}
+echo "rc=\$?" >> ${CONFD_SCRIPT}
+echo "echo \$rc" >> ${CONFD_SCRIPT}
+chmod 755 ${CONFD_SCRIPT}
+
+# Run confd start script
+${CONFD_SCRIPT}
+
+# Run monit
+/usr/bin/monit -I
