@@ -17,8 +17,8 @@ docker run -it <repo>/rancher-zk:<version>
 
 # How it works
 
-* The docker has the entrypoint /usr/bin/start.sh, that check rancher-metadata server connectivity and starts confd. It checks, reconfigures and restart the zookeeper cluster, every $CONFD_INTERVAL seconds.
-* Zookeeper memory params could be overrided, by JVMFLAGS env variable.
+* The docker has the entrypoint /usr/bin/start.sh, that check rancher-metadata server connectivity, starts confd and monit. It checks, reconfigures and restart the zookeeper cluster, every $CONFD_INTERVAL seconds.
+* Zookeeper memory params could be overrided by JVMFLAGS env variable.
 * Scale could be from 1 to n nodes. Recommended to use odd values: 3,5,7,...
 * Default env variables values:
 CONFD_BACKEND=${CONFD_BACKEND:-"rancher"}       # Default confd backend
