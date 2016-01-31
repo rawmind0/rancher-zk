@@ -1,7 +1,7 @@
-FROM rawmind/rancher-jvm8:0.0.1
+FROM rawmind/rancher-jvm8:0.0.2
 MAINTAINER Raul Sanchez <rawmind@gmail.com>
 
-ENV ZOO_VERSION=3.4.7 \
+ENV ZOO_VERSION=3.4.6 \
     ZOO_HOME=/opt/zk \ 
     ZOO_LOG_DIR=/opt/zk/logs \
     PATH=/opt/zk/bin:${PATH}
@@ -16,6 +16,10 @@ RUN curl -sS -k http://apache.rediris.es/zookeeper/${ZOO_RELEASE}/${ZOO_RELEASE}
 ADD confd/*.toml /etc/confd/conf.d/
 ADD confd/*.tmpl /etc/confd/templates/
 
+# Add monit conf for services
+ADD monit/*.conf /etc/monit/conf.d/
+
+# Add start script
 ADD start.sh /usr/bin/start.sh
 RUN chmod +x /usr/bin/start.sh
 
