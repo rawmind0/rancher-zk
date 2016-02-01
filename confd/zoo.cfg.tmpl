@@ -6,5 +6,5 @@ maxClientCnxns=500
 clientPort=2181
 autopurge.snapRetainCount=3
 autopurge.purgeInterval=1
-{{range ls "/self/service/containers"}}{{ $containerName := getv (printf "/self/service/containers/%s" .)}}
+{{range $i, $containerName := ls "/self/service/containers"}}
 server.{{getv (printf "/containers/%s/create_index" $containerName)}}={{getv (printf "/containers/%s/primary_ip" $containerName)}}:2888:3888{{end}}
