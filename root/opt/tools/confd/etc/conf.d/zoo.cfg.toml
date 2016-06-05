@@ -1,10 +1,11 @@
 [template]
+prefix = "/self/service"
 src = "zoo.cfg.tmpl"
 dest = "/opt/zk/conf/zoo.cfg"
 owner = "root"
 mode = "0644"
 keys = [
-  "/self/service/containers",
+  "/containers",
 ]
 
 reload_cmd = "/opt/zk/bin/zk-service.sh restart"
