@@ -11,7 +11,7 @@ docker build -t rawmind/rancher-zk:<version> .
 
 ## Versions
 
-- `3.4.6-3` [(Dockerfile)](https://github.com/rawmind0/rancher-zk/blob/3.4.6-3/README.md)
+- `3.4.6-4` [(Dockerfile)](https://github.com/rawmind0/rancher-zk/blob/3.4.6-3/README.md)
 
 
 ## Usage
