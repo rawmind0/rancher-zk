@@ -27,7 +27,7 @@ function checkNetwork {
 function serviceTemplate {
     log "[ Checking ${CONF_NAME} template... ]"
     if [ ! -f "/opt/tools/${CONF_NAME}/etc/templates/zoo.cfg.tmpl" ]; then
-        /opt/tools/${CONF_NAME}/bin/zoo.cfg.tmpl.sh
+        bash ${CONF_HOME}/bin/zoo.cfg.tmpl.sh
     fi
 }
 

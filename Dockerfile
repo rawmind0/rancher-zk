@@ -1,9 +1,8 @@
-FROM rawmind/rancher-tools:0.3.3-0
+FROM rawmind/rancher-tools:0.3.3-1
 MAINTAINER Raul Sanchez <rawmind@gmail.com>
 
 #Set environment
-ENV CONF_NAME=confd \
-    SERVICE_NAME=zk \
+ENV SERVICE_NAME=zk \
     SERVICE_USER=zookeeper \
     SERVICE_UID=10002 \
     SERVICE_GROUP=zookeeper \
@@ -11,6 +10,4 @@ ENV CONF_NAME=confd \
 
 # Add service files
 ADD root /
-RUN chmod +x /opt/tools/${CONF_NAME}/bin/*.sh
 
-CMD ["chown", "-R", "${SERVICE_UID}:${SERVICE_GID}", "/opt/tools"]
