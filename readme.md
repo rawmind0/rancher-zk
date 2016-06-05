@@ -1,28 +1,23 @@
 rancher-zk
-============
+==============
 
-rancher-zk image based in rancher-jvm8
+This image is the zookeeper dynamic conf for rancher. It comes from [rawmind/rancher-tools][rancher-tools].
 
-To build
-
-```
-docker build -t <repo>/rancher-zk:<version> .
-```
-
-To run:
+## Build
 
 ```
-docker run -it <repo>/rancher-zk:<version> 
+docker build -t rawmind/rancher-zk:<version> .
 ```
 
-# How it works
+## Versions
 
-* The docker has the entrypoint /usr/bin/start.sh, that check rancher-metadata server connectivity, starts confd and monit. It checks, reconfigures and restart the zookeeper cluster, every $CONFD_INTERVAL seconds.
-* Zookeeper memory params could be overrided by JVMFLAGS env variable.
-* Scale could be from 1 to n nodes. Recommended to use odd values: 3,5,7,...
-* Default env variables values:
-CONFD_BACKEND=${CONFD_BACKEND:-"rancher"}       # Default confd backend
-CONFD_PREFIX=${CONFD_PREFIX:-"/latest"}     	# Default prefix to rancher-metadata backend
-CONFD_INTERVAL=${CONFD_INTERVAL:-60}            # Default check interval
-RANCHER_METADATA=${RANCHER_METADATA:-"rancher-metadata.rancher.internal"}   # Default rancher-metadata server
-JVMFLAGS=${JVMFLAGS:-"-Xms512m -Xmx512m"}       # Default zookeeper memory value
+- `0.0.1` [(Dockerfile)](https://github.com/rawmind0/rancher-traefik/blob/master/Dockerfile)
+
+
+## Usage
+
+This image has to be run as a sidekick of [rawmind/alpine-zk][alpine-zk], and makes available /opt/tools volume. It scans from rancher-metadata, for a zookeeper stack and generates /opt/zk/conf/zoo.cfg and /opt/zk/conf/myid dynamicly.
+
+
+[alpine-zk]: https://github.com/rawmind0/alpine-zk
+[rancher-tools]: https://github.com/rawmind0/rancher-tools
