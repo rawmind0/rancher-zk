@@ -1,0 +1,1 @@
+docker build -t rawmind/rancher-zk:$(cat version) .

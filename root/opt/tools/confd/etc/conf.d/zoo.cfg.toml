@@ -7,4 +7,4 @@ keys = [
   "/self/service/containers",
 ]
 
-reload_cmd = "/opt/zk/bin/zkServer.sh restart"
+reload_cmd = "/opt/zk/bin/zk-service.sh restart"
