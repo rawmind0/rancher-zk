@@ -16,22 +16,21 @@ function checkNetwork {
     done
 
     log "[ Checking container connectivity... ]"
-    b="`ping -c 1 rancher-metadata &> /dev/null; echo $?`"
+    b="`fping -c 1 rancher-metadata.rancher.internal &> /dev/null; echo $?`"
     while [ $b -eq 1 ]; 
     do
-        b="`ping -c 1 rancher-metadata &> /dev/null; echo $?`"
+        b="`fping -c 1 rancher-metadata.rancher.internal &> /dev/null; echo $?`"
         sleep 1 
     done
 }
 
 function serviceTemplate {
     log "[ Checking ${CONF_NAME} template... ]"
-    if [ ! -f "/opt/tools/${CONF_NAME}/etc/templates/zoo.cfg.tmpl" ]; then
-        bash ${CONF_HOME}/bin/zoo.cfg.tmpl.sh
-    fi
+    bash ${CONF_HOME}/bin/zoo.cfg.tmpl.sh
 }
 
 function serviceStart {
+    checkNetwork
     serviceTemplate
     log "[ Starting ${CONF_NAME}... ]"
     /usr/bin/nohup ${CONF_INTERVAL} > ${CONF_HOME}/log/confd.log 2>&1 &
@@ -44,9 +43,9 @@ function serviceStop {
 
 function serviceRestart {
     log "[ Restarting ${CONF_NAME}... ]"
-    serviceStop
-    checkNetwork 
+    serviceStop 
     serviceStart
+    /opt/monit/bin/monit reload
 }
 
 CONF_NAME=confd

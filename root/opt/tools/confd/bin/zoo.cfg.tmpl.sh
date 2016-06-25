@@ -1,6 +1,14 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-cat << EOF > /opt/tools/confd/etc/templates/zoo.cfg.tmpl
+SERVICE_TMPL=${SERVICE_TMPL:-"/opt/tools/confd/etc/templates/zoo.cfg.tmpl"}
+
+ZK_DATA_DIR=${ZK_DATA_DIR:-"/opt/zk/data"}
+ZK_INIT_LIMIT=${ZK_INIT_LIMIT:-"10"}
+ZK_MAX_CLIENT_CXNS=${ZK_MAX_CLIENT_CXNS:-"500"}
+ZK_SYNC_LIMIT=${ZK_SYNC_LIMIT:-"5"}
+ZK_TICK_TIME=${ZK_TICK_TIME:-"2000"}
+
+cat << EOF > ${SERVICE_TMPL}
 tickTime=${ZK_TICK_TIME}
 initLimit=${ZK_INIT_LIMIT}
 syncLimit=${ZK_SYNC_LIMIT}
