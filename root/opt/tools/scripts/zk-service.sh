@@ -31,9 +31,6 @@ function waitDeploy {
 function getLeader {
     node_leader="none"
 
-for i in `curl -Ss ${CONF_URL}/self/service/containers | cut -d"=" -f1
-`; do echo - $(curl -Ss ${CONF_URL}/self/service/containers/$i/primary_ip) ;done
-
     for i in $(curl -Ss ${CONF_URL}/self/service/containers | cut -d"=" -f1)  
     do 
         node_ip=$(curl -Ss ${CONF_URL}/self/service/containers/$i/primary_ip)
